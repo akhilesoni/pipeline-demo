@@ -1,33 +1,38 @@
 # =========================================================================
 # Stage 1: Cache dependencies and build the application
 # =========================================================================
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+
 WORKDIR /app
 
 # Step A: Copy ONLY the dependency manifest
 COPY pom.xml .
 
-# Step B: Download dependencies (This layer is cached unless pom.xml changes)
+# Step B: Download dependencies
 RUN mvn dependency:go-offline -B
 
 # Step C: Copy source code and build the package
 COPY src ./src
+
 RUN mvn clean package -DskipTests -B
 
+
 # =========================================================================
-# Stage 2: Create a minimal, secure runtime environment
+# Stage 2: Create a minimal runtime environment
 # =========================================================================
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
 
-# Add a non-privileged user for security compliance
+# Add a non-privileged user
 RUN addgroup -S spring && adduser -S spring -G spring
+
 USER spring:spring
 
-# Copy built artifact from Stage 1
+# Copy built artifact
 COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8080
+EXPOSE 8000
 
-# Production JVM optimizations for container environments
+# Start application
 ENTRYPOINT ["java", "-server", "-XX:+UseG1GC", "-jar", "app.jar"]
