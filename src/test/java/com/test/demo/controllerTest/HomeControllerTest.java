@@ -26,4 +26,15 @@ class HomeControllerTest {
                         "<html><body><h1>About!</h1><p>Served from RestController.</p></body></html>"
                 ));
     }
+
+    @Test
+    void shouldReturnHomePage() throws Exception {
+
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(
+                        "<html><body><h1>Hello, World!</h1><p>Served from RestController.</p></body></html>"
+                ));
+    }
 }
