@@ -11,4 +11,9 @@ public class HomeController {
     public String returnHtmlSnippet() {
         return "<html><body><h1>Hello, World!</h1><p>Served from RestController.</p></body></html>";
     }
+
+    @GetMapping( value = "/about",produces = MediaType.TEXT_HTML_VALUE)
+    public String about() {
+        return "<html><body><h1>About!</h1><p>Served from RestController.</p></body></html>";
+    }
 }
