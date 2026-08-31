@@ -23,6 +23,9 @@ RUN mvn clean package -DskipTests -B
 # =========================================================================
 FROM eclipse-temurin:21-jre-alpine
 
+RUN apk update && apk upgrade
+
+
 WORKDIR /app
 
 # Create non-privileged user
