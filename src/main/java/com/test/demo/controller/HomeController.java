@@ -15,4 +15,11 @@ public class HomeController {
     public String about() {
         return "<html><body><h1>About!</h1><p>Served from RestController.</p></body></html>";
     }
+
+    @GetMapping( value = "/contact",produces = MediaType.TEXT_HTML_VALUE)
+    public String contact() {
+        return "<html><body><h1>Contact!</h1><p>Served from RestController.</p></body></html>";
+    }
+
+
 }
